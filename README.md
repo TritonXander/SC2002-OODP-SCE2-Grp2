@@ -15,6 +15,41 @@ Stage comparisons: [Stage 1 → 2](https://github.com/Jiarot/SC2002-OODP-SCE2-Gr
 
 Build/run commands and exact replay inputs are in the linked test notes. Compile only one stage at a time because the stages reuse class names.
 
+## Stage 2 → Stage 3 transition
+
+The source comparison adds five classes, changes eight existing classes functionally and retains ten classes without gameplay changes. No Java classes are deleted or renamed. These counts compare corresponding class filenames across the separate stage folders; Git history adds the Stage 3 folder as a saved version.
+
+### New files
+
+| File | Responsibility and reason |
+|---|---|
+| `StaffMember.java` | Centralises the one-task availability rule used by Host, Waiter and Chef. Cashier remains separate. |
+| `Host.java` | Adds one seating task before the Waiter, using shared seating rules. |
+| `Dish.java` | Defines food name, price and preparation so orders can hold single items or combos. |
+| `ComboMeal.java` | Combines two existing menu items, sums preparation and charges 90% of the combined price rounded to cents. |
+| `HappyHour.java` | Holds once-per-game activation, two-turn duration and 20% discount policy. |
+
+### Existing files changed
+
+| File | Change and reason |
+|---|---|
+| `Waiter.java` | Extends `StaffMember` instead of duplicating availability state. |
+| `Chef.java` | Extends `StaffMember` for the same one-task rule. |
+| `MenuItem.java` | Implements `Dish`, preserving the existing single-item data. |
+| `Order.java` | Stores `Dish` instead of `MenuItem` and receives the locked bill from the controller. This is the one-time food-type refactor needed for combos and policy pricing. |
+| `Customer.java` | Adds eligible satisfaction recovery for Happy Hour; it was already abstract in Stage 1. |
+| `CustomerFoodChooser.java` | Adds the documented combo rule at satisfaction 95 or above while retaining the original main-dish selection rule. |
+| `RestaurantController.java` | Owns Host/Happy Hour, shares seating through `seatCustomer(StaffMember,...)`, applies customer discount before Happy Hour and invokes policy recovery. |
+| `ConsoleUI.java` | Adds Host and Happy Hour choices/status while retaining the established turn pipeline. |
+
+### Files without gameplay changes
+
+`ActionResult.java`, `Cashier.java`, `CustomerReaction.java`, `CustomerStatus.java`, `OrderStatus.java`, `Table.java`, `RegularCustomer.java`, `VIPCustomer.java`, `CriticCustomer.java` and `RestaurantGameApp.java` retain their behavior. Some copies differ only in line endings or comments; these are not additional functional modifications.
+
+The waiting/abandonment and victory method bodies remain unchanged across all three stages. Stage 2 → 3 also preserves the eating/payment method and all three concrete customer subclasses. Preparation and payment continue through `Order` and `Table`; Chef/Cashier do not acquire concrete combo type-check chains. Each historical candidate and current stage folder independently compiles with Java 17 compatibility. Reproducible victory/defeat strategies and recorded metrics remain in the linked test notes; compilation is not a substitute for their gameplay checks.
+
+[Historical source comparison](https://github.com/Jiarot/SC2002-OODP-SCE2-Grp2/compare/fd439e4764bb3106bf445d7d6d610fd070dfcece...7aefd8e8fa7e8c296f1ceeddb6d6ab3ec88abc23). Published stage tags identify the historical commits listed above.
+
 ## Presentation video and timestamps
 
 **Video:** `Group 2 Video Demonstration SC2002 - Captioned.mp4` (included with the group submission)  

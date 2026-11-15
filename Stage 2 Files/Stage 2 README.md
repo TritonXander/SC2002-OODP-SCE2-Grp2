@@ -5,10 +5,12 @@ Win/lose criteria, turn sequence and base setting are unchanged from Stage 1.
 
 ## Build and run
 
-```
-javac *.java
-java RestaurantGameApp            # menu choices use seeded randomness (seed = 42)
-java RestaurantGameApp --cycle    # menu choices rotate Salad -> Burger -> Pasta
+Run these commands from the repository root with Java 17 or later. Compile one stage at a time; committed .class files are not needed.
+
+```sh
+javac --release 17 -d /tmp/restaurant-rush-stage2 "Stage 2 Files/JavaFiles/"*.java
+java -cp /tmp/restaurant-rush-stage2 RestaurantGameApp
+java -cp /tmp/restaurant-rush-stage2 RestaurantGameApp --cycle
 ```
 
 Requires Java 17 or later (the UI uses switch expressions).
